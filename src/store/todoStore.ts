@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { BASE_URL } from '../api/baseUrl';
 
-import { Todo, MetaResponse, TodoInfo } from "../types";
+import { Todo } from "../types";
 
 export const useTodoStore = defineStore('todo', {
   state: (): any => ({
