@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { BASE_URL } from '../api/baseUrl';
 import MediumButton from '../ui/MediumButton.vue';
 
 import { useTodoStore } from '../store/todoStore';

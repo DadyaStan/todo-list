@@ -7,7 +7,7 @@ import TaskCard from '../components/TaskCard.vue';
 import { Todo } from "../types";
 
 const todoStore = useTodoStore();
-const allTasks = computed<Todo[]>(() => todoStore.tasks.filter( (task) => task.isDone));
+const allTasks = computed<Todo[]>(() => todoStore.tasks.filter( (task: { isDone: any; }) => task.isDone));
 </script>
 
 <template>

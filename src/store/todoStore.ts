@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 import { BASE_URL } from '../api/baseUrl';
 
-import { Todo, MetaResponse } from "../types";
+import { Todo, MetaResponse, TodoInfo } from "../types";
 
 export const useTodoStore = defineStore('todo', {
-  state: (): MetaResponse => ({
+  state: (): any => ({
     tasks: [],
     info: null,
     meta: null,
@@ -57,7 +57,7 @@ export const useTodoStore = defineStore('todo', {
 
         const result = await response.json();
 
-        this.tasks = this.tasks.map(task => task.id === result.id ? result : task);
+        this.tasks = this.tasks.map((task: { id: any; }) => task.id === result.id ? result : task);
 
         if (!taskChangedTitle && !taskStatus) {
           this.info.inWork++;
@@ -71,7 +71,7 @@ export const useTodoStore = defineStore('todo', {
       }
     },
     async deleteTask(taskId: number) {
-      this.tasks.map((task) => {
+      this.tasks.map((task: { id: number; isDone: any; }) => {
         if (task.id === taskId) {
           if (task.isDone) {
             this.info.completed--
@@ -81,7 +81,7 @@ export const useTodoStore = defineStore('todo', {
         }
       });
 
-      this.tasks = this.tasks.filter(task => task.id !== taskId);
+      this.tasks = this.tasks.filter((task: { id: number; }) => task.id !== taskId);
       this.info.all--;
 
       try {
