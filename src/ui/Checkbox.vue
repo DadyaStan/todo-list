@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue';
 
-// Определяем props и emit
 defineProps<{
   modelValue: boolean; 
 }>();
@@ -15,7 +14,3 @@ defineProps<{
         />
     </div>
 </template>
-
-<style lang="scss">
-
-</style>
