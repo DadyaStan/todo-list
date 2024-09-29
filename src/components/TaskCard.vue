@@ -1,24 +1,21 @@
 <script setup lang="ts">
 import Checkbox from "../ui/Checkbox.vue";
-import ChangeButton from "../ui/ChangeButton.vue";
-import DeleteButton from "../ui/DeleteButton.vue";
-import ResetButton from "../ui/ResetButton.vue";
+import IconButton from "../ui/IconButton.vue";
 
 import { defineEmits, ref } from "vue";
 
 import { Todo } from "../types";
-import AcceptButton from "../ui/AcceptButton.vue";
 
 const task = defineProps<Todo>();
 const emit = defineEmits(['deleteTodo', 'changeTodoStatus', 'changeTodoTitle']);
 
 const isChecked = ref<boolean>(task.isDone);
-const isTodoTitleChanging = ref<boolean>(false);
+const isEdit = ref<boolean>(false);
 const changingTodoValue = ref<string>(task.title)
 
 
 const handleChangeStatus = () => {
-    emit('changeTodoStatus', task.id, !task.isDone);
+    emit('changeTodoStatus', task.id, { isDone: !task.isDone });
 }
 
 const handleDeleteTask = () => {
@@ -26,12 +23,12 @@ const handleDeleteTask = () => {
 }
 
 const handleChangeTitle = () => {
-    emit('changeTodoTitle', task.id, task.isDone, changingTodoValue.value);
-    isTodoTitleChanging.value = false;
+    emit('changeTodoTitle', task.id, { title: changingTodoValue.value });
+    isEdit.value = false;
 }
 
 const handleResetChanging = () => {
-    isTodoTitleChanging.value = false;
+    isEdit.value = false;
     changingTodoValue.value = task.title;
 }
 
@@ -48,7 +45,7 @@ const isTaskDone = (isDone: boolean) => {
                 @change="handleChangeStatus" 
             />
             <input 
-                v-if="isTodoTitleChanging" 
+                v-if="isEdit" 
                 v-model="changingTodoValue"
                 class="task-card__input task-card__content" 
                 type="text"
@@ -58,16 +55,26 @@ const isTaskDone = (isDone: boolean) => {
             </p>
         </div>
         <div class="task-card__btn-box">
-            <AcceptButton v-if="isTodoTitleChanging" @click="handleChangeTitle" />
-            <ChangeButton v-else-if="!isTodoTitleChanging" @click="isTodoTitleChanging = true"></ChangeButton>
+            <IconButton v-if="isEdit" @click="handleChangeTitle" style="background-color: #3ae43a;">
+                <img src="../assets/IconAccept.svg" alt="Accept">
+            </IconButton>
+            <IconButton v-else-if="!isEdit" @click="isEdit = true" style="background-color: #5391FC;">
+                <img src="../assets/IconRewrite.svg" alt="Rewrite">
+            </IconButton>
 
-            <DeleteButton v-if="!isTodoTitleChanging" @click="handleDeleteTask"></DeleteButton>
-            <ResetButton v-else-if="isTodoTitleChanging" @click="handleResetChanging"></ResetButton>
+            <IconButton v-if="!isEdit" @click="handleDeleteTask" style="background-color: #FC685E;">
+                <img src="../assets/IconDelete.svg" alt="Delete">
+            </IconButton>
+            <IconButton v-else-if="isEdit" @click="handleResetChanging" style="background-color: #5391FC;">
+                <img src="../assets/IconBack.svg" alt="Back">
+            </IconButton>
         </div>
     </div>
 </template>
 
 <style lang="scss">
+@import '../style.scss';
+
 .task-card {
     width: 370px;
     display: flex;
@@ -80,7 +87,9 @@ const isTaskDone = (isDone: boolean) => {
     word-wrap: break-word;
 
     &__content {
+        max-width: 230px;
         text-align: left;
+        white-space: normal;
     }
 
     &__input {

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue';
 
-defineProps<{
-  modelValue: boolean; 
+const props = defineProps<{
+    modelValue: boolean; 
 }>();
 </script>
 
@@ -10,7 +10,7 @@ defineProps<{
     <div class="checkbox-box">
         <input 
             type="checkbox" 
-            :checked="modelValue" 
+            :checked="props.modelValue" 
         />
     </div>
 </template>
