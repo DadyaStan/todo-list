@@ -1,30 +1,37 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useTodoStore } from '../store/todoStore';
+import { computed, ref, defineEmits } from 'vue';
+import { TodoInfo } from '../types';
 
-const todoStore = useTodoStore();
 
-// Тут подло использовал GPT 
-const todoInfo = computed(() => {
-    return {
-        all: todoStore.info ? todoStore.info.all : '−',
-        inWork: todoStore.info ? todoStore.info.inWork : '−',
-        completed: todoStore.info ? todoStore.info.completed : '−',
-    };
-}); 
+const emit = defineEmits(['filterChanged']);
+const todoCount = defineProps<TodoInfo>();
+const currentTodoFilter = ref<string>('all');
+
+const actualNavLink = computed(() => ({
+    all: currentTodoFilter.value === 'all' ? 'nav__el nav__el_active' : 'nav__el',
+    inWork: currentTodoFilter.value === 'inWork' ? 'nav__el nav__el_active' : 'nav__el',
+    completed: currentTodoFilter.value === 'completed' ? 'nav__el nav__el_active' : 'nav__el',
+}));
+
+const handlerChangeTodoFilter = (clickedTodoFilter: string) => {
+    if (clickedTodoFilter !== currentTodoFilter.value) {
+        currentTodoFilter.value = clickedTodoFilter;
+        emit('filterChanged', clickedTodoFilter);
+    }
+}
 </script>
 
 <template>
     <nav class="nav">
-        <router-link class="nav__el" to="/">
-            Все ({{ todoInfo.all }})
-        </router-link>
-        <router-link class="nav__el" to="/inWork">
-            В работе ({{ todoInfo.inWork }})
-        </router-link>
-        <router-link class="nav__el" to="/completed">
-            Сделано ({{ todoInfo.completed }})
-        </router-link>
+        <div :class="actualNavLink.all" @click="handlerChangeTodoFilter('all')">
+            Все ({{ todoCount.all ? todoCount.all : '-' }})
+        </div>
+        <div :class="actualNavLink.inWork" @click="handlerChangeTodoFilter('inWork')">
+            В работе ({{ todoCount.inWork ? todoCount.inWork : '-' }})
+        </div>
+        <div :class="actualNavLink.completed" @click="handlerChangeTodoFilter('completed')">
+            Сделано ({{ todoCount.completed ? todoCount.completed : '-' }})
+        </div>
     </nav>
 </template>
 
@@ -41,15 +48,12 @@ const todoInfo = computed(() => {
         font-size: 20px;
         color: grey;
         font-weight: 700;
+        cursor: pointer;
 
         &_active {
+            color: $main-aqua;
             text-decoration: underline;
         }
     }
-}
-
-.router-link-active {
-    color: $main-aqua;
-    text-decoration: underline;
 }
 </style>

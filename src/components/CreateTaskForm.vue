@@ -2,24 +2,24 @@
 import { ref } from 'vue';
 import MediumButton from '../ui/MediumButton.vue';
 
-import { useTodoStore } from '../store/todoStore';
+const todoInputValue = ref<string>('');
 
-const todoStore = useTodoStore();
-
-const inputValue = ref<string>('');
+const emit = defineEmits(['createNewTodo']);
 
 const handleAddTask = async () => {
-    if (inputValue.value) {
-        todoStore.addTask(inputValue.value);
-        inputValue.value = '';
+    if (todoInputValue.value) {
+        await emit('createNewTodo', todoInputValue.value);
+        todoInputValue.value = '';
     }
 }
 </script>
 
 <template>
     <div class="create-task-form">
-        <input v-model="inputValue" class="create-task-form__input" type="text" placeholder="Task To Be Done..." />
-        <MediumButton @click="handleAddTask"/>
+        <input v-model="todoInputValue" class="create-task-form__input" type="text" placeholder="Task To Be Done..." />
+        <MediumButton @click="handleAddTask">
+            Add
+        </MediumButton>
     </div> 
 </template>
 

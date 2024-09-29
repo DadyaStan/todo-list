@@ -2,20 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   {
-    path: 'todo-list/',
-    name: 'all',
-    component: () => import('../views/AllView.vue'),
-  },
-  {
-    path: 'todo-list/inWork',
-    name: 'inWork',
-    component: () => import('../views/InWorkView.vue'),
-  },
-  {
-    path: 'todo-list/completed',
-    name: 'completed',
-    component: () => import('../views/CompletedView.vue'),
-  },
+    path: '/todo-list/',
+    name: 'todo',
+    component: () => import('../views/TodoView.vue'),
+  }
 ];
 
 const router = createRouter({

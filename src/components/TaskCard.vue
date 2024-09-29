@@ -1,50 +1,68 @@
 <script setup lang="ts">
-import { useTodoStore } from "../store/todoStore";
-
 import Checkbox from "../ui/Checkbox.vue";
 import ChangeButton from "../ui/ChangeButton.vue";
 import DeleteButton from "../ui/DeleteButton.vue";
+import ResetButton from "../ui/ResetButton.vue";
 
 import { defineEmits, ref } from "vue";
 
 import { Todo } from "../types";
+import AcceptButton from "../ui/AcceptButton.vue";
 
 const task = defineProps<Todo>();
-const emit = defineEmits(['todoDeleted', 'todoChange']);
-const todoStore = useTodoStore();
+const emit = defineEmits(['deleteTodo', 'changeTodoStatus', 'changeTodoTitle']);
+
 const isChecked = ref<boolean>(task.isDone);
+const isTodoTitleChanging = ref<boolean>(false);
+const changingTodoValue = ref<string>(task.title)
+
 
 const handleChangeStatus = () => {
-    todoStore.changeTask(task.id, !task.isDone);
+    emit('changeTodoStatus', task.id, !task.isDone);
 }
 
 const handleDeleteTask = () => {
-    todoStore.deleteTask(task.id)
+    emit('deleteTodo', task.id);
 }
 
-const handleChangeTitle = async () => {
-    const changedTitle = prompt('Изменение заметки', task.title);
-    
-    if (changedTitle !== task.title) {
-        todoStore.changeTask(task.id, task.isDone, changedTitle);
-    }
+const handleChangeTitle = () => {
+    emit('changeTodoTitle', task.id, task.isDone, changingTodoValue.value);
+    isTodoTitleChanging.value = false;
+}
+
+const handleResetChanging = () => {
+    isTodoTitleChanging.value = false;
+    changingTodoValue.value = task.title;
 }
 
 const isTaskDone = (isDone: boolean) => {
-    console.log(isDone + ' ' + task.id)
     return isDone ? 'task-card complete-task' : 'task-card';
 }
 </script>
 
 <template>
     <div :class="isTaskDone(task.isDone)">
-        <Checkbox v-model="isChecked" @change="handleChangeStatus"/>
-        <p class="task-card__content">
-            {{ task.title }}
-        </p>
+        <div class="task-card__status-box">
+            <Checkbox 
+                v-model="isChecked" 
+                @change="handleChangeStatus" 
+            />
+            <input 
+                v-if="isTodoTitleChanging" 
+                v-model="changingTodoValue"
+                class="task-card__input task-card__content" 
+                type="text"
+            >
+            <p v-else class="task-card__content">
+                {{ task.title }}
+            </p>
+        </div>
         <div class="task-card__btn-box">
-            <ChangeButton @click="handleChangeTitle"></ChangeButton>
-            <DeleteButton @click="handleDeleteTask"></DeleteButton>
+            <AcceptButton v-if="isTodoTitleChanging" @click="handleChangeTitle" />
+            <ChangeButton v-else-if="!isTodoTitleChanging" @click="isTodoTitleChanging = true"></ChangeButton>
+
+            <DeleteButton v-if="!isTodoTitleChanging" @click="handleDeleteTask"></DeleteButton>
+            <ResetButton v-else-if="isTodoTitleChanging" @click="handleResetChanging"></ResetButton>
         </div>
     </div>
 </template>
@@ -62,8 +80,20 @@ const isTaskDone = (isDone: boolean) => {
     word-wrap: break-word;
 
     &__content {
-        width: 65%;
         text-align: left;
+    }
+
+    &__input {
+        width: 70%;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid #555;
+    }
+
+    &__status-box {
+        width: 100%;
+        display: flex;
+        gap: 10px
     }
 
     &__btn-box {
