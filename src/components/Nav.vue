@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import { computed, ref, defineEmits } from 'vue';
+import { ref, defineEmits } from 'vue';
 import { TodoInfo } from '../types';
 
 
 const emit = defineEmits(['filterChanged']);
-const todoCount = defineProps<TodoInfo>();
-const currentTodoFilter = ref<string>('all');
+const props = defineProps<{
+    todoCount: TodoInfo
+}>();
 
-const actualNavLink = computed(() => ({
-    all: currentTodoFilter.value === 'all' ? 'nav__el nav__el_active' : 'nav__el',
-    inWork: currentTodoFilter.value === 'inWork' ? 'nav__el nav__el_active' : 'nav__el',
-    completed: currentTodoFilter.value === 'completed' ? 'nav__el nav__el_active' : 'nav__el',
-}));
+const currentTodoFilter = ref<string>('all');
 
 const handlerChangeTodoFilter = (clickedTodoFilter: string) => {
     if (clickedTodoFilter !== currentTodoFilter.value) {
@@ -23,14 +20,14 @@ const handlerChangeTodoFilter = (clickedTodoFilter: string) => {
 
 <template>
     <nav class="nav">
-        <div :class="actualNavLink.all" @click="handlerChangeTodoFilter('all')">
-            Все ({{ todoCount.all ? todoCount.all : '-' }})
+        <div :class="{ nav__el: true, nav__el_active: currentTodoFilter === 'all' }" @click="handlerChangeTodoFilter('all')">
+            Все ({{ props.todoCount.all ? props.todoCount.all : '-' }})
         </div>
-        <div :class="actualNavLink.inWork" @click="handlerChangeTodoFilter('inWork')">
-            В работе ({{ todoCount.inWork ? todoCount.inWork : '-' }})
+        <div :class="{ nav__el: true, nav__el_active: currentTodoFilter === 'inWork' }" @click="handlerChangeTodoFilter('inWork')">
+            В работе ({{ props.todoCount.inWork ? props.todoCount.inWork : '-' }})
         </div>
-        <div :class="actualNavLink.completed" @click="handlerChangeTodoFilter('completed')">
-            Сделано ({{ todoCount.completed ? todoCount.completed : '-' }})
+        <div :class="{ nav__el: true, nav__el_active: currentTodoFilter === 'completed' }" @click="handlerChangeTodoFilter('completed')">
+            Сделано ({{ props.todoCount.completed ? props.todoCount.completed : '-' }})
         </div>
     </nav>
 </template>
