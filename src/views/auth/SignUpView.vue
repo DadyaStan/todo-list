@@ -5,7 +5,7 @@ import { useAuthStore } from '../../store/authStore';
 
 const authStore = useAuthStore();
 
-const formState = reactive({
+const formState = reactive<any>({
     user: {
         username: '',
         login: '',
