@@ -13,6 +13,11 @@ $main-aqua: #54BBEB;
   text-rendering: optimizeLegibility;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 a {
   text-decoration: none;
 }
@@ -30,17 +35,20 @@ button {
   border: none;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  min-width: 320px;
-  min-height: 100vh;
-}
+// body {
+//   margin: 0;
+//   display: flex;
+//   min-width: 320px;
+//   min-height: 100vh;
+// }
 
+// #app {
+//   max-width: 1280px;
+//   margin: 0 auto;
+//   text-align: center;
+// }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.container {
+  width: 1000px;
+  padding: 0 10px;
 }

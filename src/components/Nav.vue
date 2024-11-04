@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, defineEmits } from 'vue';
-import { TodoInfo } from '../types';
+import { TodoInfo } from '../types/todo';
 
 
 const emit = defineEmits(['filterChanged']);
