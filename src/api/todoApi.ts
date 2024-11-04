@@ -1,38 +1,44 @@
+import { Todo, TodoInfo, MetaResponse, TodoRequest } from "../types";
+
 export const BASE_URL = 'https://easydev.club/api/v1';
 
-export const fetchAllTodo = async () => {
+export const fetchAllTodo = async (): Promise<MetaResponse<Todo, TodoInfo> | undefined> => {
     try {
-        const response = await fetch(`${BASE_URL}/todos`);
-        const result = await response.json();
+        const response: Response = await fetch(`${BASE_URL}/todos`);
+        const result: MetaResponse<Todo, TodoInfo> = await response.json();
 
         if (!response.ok) {
-            throw new Error('Ошибка при загрузки всех задач');
+            throw new Error('Ошибка при загрузки задач ' + Error);
         }
 
         return result;
     } catch (error) {
         console.error(error);
+
+        throw new Error('Ошибка при загрузки задач ' + Error);
     }
 };
 
-export const fetchFilteredTodo = async (newFilter: string) => {
+export const fetchFilteredTodo = async (newFilter: string): Promise<MetaResponse<Todo, TodoInfo> | undefined> => {
     try {
-        const response = await fetch(`${BASE_URL}/todos?filter=${newFilter}`);
-        const result = await response.json();
+        const response: Response = await fetch(`${BASE_URL}/todos?filter=${newFilter}`);
+        const result: MetaResponse<Todo, TodoInfo> = await response.json();
 
         if (!response.ok) {
-            throw new Error('Ошибка при загрузки всех задач');
+            throw new Error('Ошибка при загрузки задач ' + Error);
         }
 
         return result;
     } catch (error) {
         console.error(error);
+
+        throw new Error('Ошибка при загрузки задач ' + Error);
     }
 }
 
 export const createNewTodo = async (inputValue: string): Promise<void> => {
     try {
-        const response = await fetch(`${BASE_URL}/todos`, {
+        const response: Response = await fetch(`${BASE_URL}/todos`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -41,39 +47,43 @@ export const createNewTodo = async (inputValue: string): Promise<void> => {
         });
 
         if (!response.ok) {
-            throw new Error('Ошибка при создании задачи');
+            throw new Error('Ошибка при создании задачи ' + Error);
         }
 
     } catch (error) {
         console.error(error);
+
+        throw new Error('Ошибка при создании задачи ' + Error);
     }
 };
 
-export const changeTodo = async (taskId: number, taskStatus?: boolean, taskChangedTitle?: string): Promise<void> => {
+export const changeTodo = async (taskId: number, changedTask: TodoRequest): Promise<Todo> => {
     try {
-        const response = await fetch(`${BASE_URL}/todos/${taskId}`, {
+        const response: Response = await fetch(`${BASE_URL}/todos/${taskId}`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify({ isDone: taskStatus, title: taskChangedTitle })
+            body: JSON.stringify(changedTask)
         });
 
         if (!response.ok) {
-            throw new Error('Ошибка при удалении');
+            throw new Error('Ошибка при изменении задачи ' + Error);
         }
 
-        const result = await response.json();
+        const result: Todo = await response.json();
         return result;
 
     } catch (error) {
         console.error(error);
+
+        throw new Error('Ошибка при изменении задачи ' + Error);
     }
 };
 
 export const deleteTask = async (taskId: number): Promise<void> => {
     try {
-        const response = await fetch(`${BASE_URL}/todos/${taskId}`, {
+        const response: Response = await fetch(`${BASE_URL}/todos/${taskId}`, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
@@ -81,10 +91,12 @@ export const deleteTask = async (taskId: number): Promise<void> => {
         });
 
         if (!response.ok) {
-            throw new Error('Ошибка при удалении');
+            throw new Error('Ошибка при удалении ' + Error);
         }
 
     } catch (error) {
         console.error(error);
+
+        throw new Error('Ошибка при удалении ' + Error);
     }
 };
