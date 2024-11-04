@@ -4,7 +4,7 @@ import IconButton from "../ui/IconButton.vue";
 
 import { defineEmits, ref } from "vue";
 
-import { Todo } from "../types";
+import { Todo } from "../types/todo";
 
 const task = defineProps<Todo>();
 const emit = defineEmits(['deleteTodo', 'changeTodoStatus', 'changeTodoTitle']);
