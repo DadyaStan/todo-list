@@ -72,12 +72,6 @@ const disabled = computed(() => {
     justify-content: center;
     align-items: center;
 
-    &__login-box {
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
-    }
-
     // &__background {
     //     width: 1110px;
     //     height: 100vh;

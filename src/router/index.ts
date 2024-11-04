@@ -5,18 +5,14 @@ import SignUpView from '../views/auth/SignUpView.vue';
 
 const routes = [
   {
-    path: '/todo-list/',
-    name: 'auth',
-    children: [
-      {
-        path: 'login',
-        component: LoginView
-      },
-      {
-        path: 'sign-up',
-        component: SignUpView
-      }
-    ]
+    path: '/todo-list/login',
+    name: 'login',
+    component: LoginView
+  },
+  {
+    path: '/todo-list/sign-up',
+    name: 'sign-up',
+    component: SignUpView
   },
   {
     path: '/todo-list/todo',
@@ -33,6 +29,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, _from, next) => {
+  const isLoggedIn = localStorage.getItem('accessToken'); 
+
+  if (to.path === '/todo-list' && !isLoggedIn) {
+      next('/todo-list/login'); 
+  } else {
+      next();
+  }
 });
 
 export default router;
