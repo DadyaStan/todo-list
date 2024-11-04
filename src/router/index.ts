@@ -2,8 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import LoginView from '../views/auth/LoginView.vue';
 import SignUpView from '../views/auth/SignUpView.vue';
+import Base from '../views/Base.vue';
 
 const routes = [
+  {
+    path: '/todo-list',
+    name: 'base',
+    component: Base
+  },
   {
     path: '/todo-list/login',
     name: 'login',
@@ -31,14 +37,14 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, _from, next) => {
-  const isLoggedIn = localStorage.getItem('accessToken'); 
+// router.beforeEach((to, _from, next) => {
+//   const isLoggedIn = localStorage.getItem('accessToken'); 
 
-  if (to.path === '/todo-list' && !isLoggedIn) {
-      next('/todo-list/login'); 
-  } else {
-      next();
-  }
-});
+//   if (to.path === '/todo-list' && !isLoggedIn) {
+//       next('/todo-list/login'); 
+//   } else {
+//       next();
+//   }
+// });
 
 export default router;
